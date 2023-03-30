@@ -1,33 +1,5 @@
+use crate::model::{food::Food, elf::Elf, food_bag::FoodBag};
 use std::{fs::File, io::Read, path::Path, vec};
-
-struct Food {
-    calories: u32,
-}
-
-struct FoodBag {
-    items: Vec<Food>,
-}
-
-impl FoodBag {
-    fn total_calories(&self) -> u32 {
-        let mut total: u32 = 0;
-        for food in self.items.iter() {
-            total = total + food.calories;
-        }
-
-        total
-    }
-}
-
-struct Elf {
-    food_bag: FoodBag,
-}
-
-impl Elf {
-    fn total_calories(&self) -> u32 {
-        self.food_bag.total_calories()
-    }
-}
 
 pub fn find_elf_carrying_most_calories() -> usize {
     let data_file_path = Path::new("resources/day_1.txt");
@@ -45,7 +17,7 @@ pub fn find_elf_carrying_most_calories() -> usize {
         if part == "" {
             println!("Empty line");
 
-            continue
+            continue;
         }
 
         print!("{}", part);

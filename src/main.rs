@@ -1,5 +1,7 @@
 use crate::day_1::find_elf_carrying_most_calories;
 
+pub mod utils;
+pub mod model;
 pub mod day_1;
 
 fn main() {
