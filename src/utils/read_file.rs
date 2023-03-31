@@ -1,18 +1,63 @@
-use std::error::Error;
-use std::{fs::File, path::Path};
+use std::{fs::File, io, path::Path};
 
-pub fn read_file(path: String) -> Result<String, > {
-    let data_file_path = Path::new(&path);
-    let mut data_file = File::open(&data_file_path);
-    let mut data_file = match File::open(data_file_path) {
-        Err(e) => return Err(e),
-        Ok(file) => file,
-    };
-    let mut content = String::new();
-    match data_file.read_to_string(&mut content) {
-        Err(e) => return Err(e),
-        Ok(_) => {}
+struct FileReader {
+    file: Box<dyn FileWrapper>,
+}
+
+impl FileReader {
+    fn nullable() -> FileReader {
+        FileReader {
+            file: StubbedFile::new(),
+        }
     }
 
-    Ok(content)
+    fn new() -> FileReader {
+        FileReader {
+            file: RealFile::new(),
+        }
+    }
+
+    fn open(&self, path: &String) -> Result<String, io::Error> {
+        let data_file_path = Path::new(&path);
+
+        let mut data_file = match self.file.open(&data_file_path) {
+            Err(e) => return Err(e),
+            Ok(file) => file,
+        };
+        let mut content = String::new();
+        data_file.read_to_string(&mut content);
+
+        Ok(content)
+    }
+}
+
+trait FileWrapper {
+    fn open(&self, path: &Path) -> Result<File, io::Error>;
+}
+
+struct RealFile {}
+
+impl RealFile {
+    fn new() -> Box<RealFile> {
+        Box::new(RealFile {})
+    }
+}
+impl FileWrapper for RealFile {
+    fn open(&self, path: &Path) -> Result<File, io::Error> {
+        File::open(path)
+    }
+}
+
+struct StubbedFile {}
+
+impl StubbedFile {
+    fn new() -> Box<StubbedFile> {
+        Box::new(StubbedFile {})
+    }
+}
+
+impl FileWrapper for StubbedFile {
+    fn open(&self, path: &Path) -> Result<File, io::Error> {
+        todo!()
+    }
 }
