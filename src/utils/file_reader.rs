@@ -4,20 +4,22 @@ use std::{
     path::Path,
 };
 
+use self::nullables::*;
+
 struct FileReader {
-    file: Box<dyn FileWrapper>,
+    file: Box<dyn FileOpenWrapper>,
 }
 
 impl FileReader {
-    fn nullable(file_contents: String) -> FileReader {
+    fn nullable(file_contents: &str) -> FileReader {
         FileReader {
-            file: StubbedFile::new(file_contents),
+            file: StubbedFileOpen::new(file_contents),
         }
     }
 
     fn new() -> FileReader {
         FileReader {
-            file: RealFile::new(),
+            file: RealFileOpen::new(),
         }
     }
 
@@ -32,36 +34,81 @@ impl FileReader {
     }
 }
 
-trait FileWrapper {
-    fn open(&self, path: &Path) -> Result<File, io::Error>;
-}
+mod nullables {
+    use super::*;
 
-struct RealFile {}
-
-impl RealFile {
-    fn new() -> Box<RealFile> {
-        Box::new(RealFile {})
+    pub trait FileReaderWrapper {
+        fn read_to_string(&mut self, content: &mut String) -> Result<usize, io::Error>;
     }
-}
-impl FileWrapper for RealFile {
-    fn open(&self, path: &Path) -> Result<File, io::Error> {
-        File::open(path)
+
+    struct RealFileReader {
+        file: File,
     }
-}
 
-struct StubbedFile {
-    file_contents: String,
-}
-
-impl StubbedFile {
-    fn new(file_contents: String) -> Box<StubbedFile> {
-        Box::new(StubbedFile { file_contents })
+    impl FileReaderWrapper for RealFileReader {
+        fn read_to_string(&mut self, content: &mut String) -> Result<usize, io::Error> {
+            self.file.read_to_string(content)
+        }
     }
-}
 
-impl FileWrapper for StubbedFile {
-    fn open(&self, path: &Path) -> Result<File, io::Error> {
-        todo!()
+    struct StubbedFileReader {
+        file_contents: String,
+    }
+
+    impl StubbedFileReader {
+        fn new(file_contents: &String) -> StubbedFileReader {
+            let contents = file_contents.to_owned();
+
+            StubbedFileReader {
+                file_contents: contents,
+            }
+        }
+    }
+    impl FileReaderWrapper for StubbedFileReader {
+        fn read_to_string(&mut self, content: &mut String) -> Result<usize, io::Error> {
+            content.clear();
+            content.replace_range(.., &self.file_contents);
+
+            Ok(1)
+        }
+    }
+
+    pub trait FileOpenWrapper {
+        fn open(&self, path: &Path) -> Result<Box<dyn FileReaderWrapper>, io::Error>;
+    }
+
+    pub struct RealFileOpen {}
+
+    impl RealFileOpen {
+        pub fn new() -> Box<RealFileOpen> {
+            Box::new(RealFileOpen {})
+        }
+    }
+    impl FileOpenWrapper for RealFileOpen {
+        fn open(&self, path: &Path) -> Result<Box<dyn FileReaderWrapper>, io::Error> {
+            let file = File::open(path)?;
+
+            Ok(Box::new(RealFileReader { file }))
+        }
+    }
+
+    pub struct StubbedFileOpen {
+        file_contents: String,
+    }
+
+    impl StubbedFileOpen {
+        pub fn new(file_contents: &str) -> Box<dyn FileOpenWrapper> {
+            let file = file_contents.to_owned();
+            Box::new(StubbedFileOpen {
+                file_contents: file,
+            })
+        }
+    }
+
+    impl FileOpenWrapper for StubbedFileOpen {
+        fn open(&self, _path: &Path) -> Result<Box<dyn FileReaderWrapper>, io::Error> {
+            Ok(Box::new(StubbedFileReader::new(&self.file_contents)))
+        }
     }
 }
 
@@ -71,14 +118,11 @@ mod tests {
 
     #[test]
     fn test_file_reader() {
-        let file_reader = FileReader::nullable(String::from("Test content"));
+        let file_reader = FileReader::nullable(&"Test content");
 
         let result = file_reader.read_file(&String::from("some_path_to_file"));
 
         assert!(result.is_ok());
-        assert_eq!(
-            result.unwrap(),
-            String::from("Test content")
-        );
+        assert_eq!(result.unwrap(), String::from("Test content"));
     }
 }
