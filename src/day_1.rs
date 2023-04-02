@@ -1,72 +1,78 @@
-use crate::model::{food::Food, elf::Elf, food_bag::FoodBag};
-use std::{fs::File, io::Read, path::Path, vec};
+use std::error::Error;
 
-pub fn find_elf_carrying_most_calories() -> usize {
-    let data_file_path = Path::new("resources/day_1.txt");
-    let mut data_file = match File::open(data_file_path) {
-        Err(_) => panic!("Error opening file"),
-        Ok(file) => file,
-    };
-    let mut content = String::new();
-    match data_file.read_to_string(&mut content) {
-        Err(_) => panic!("Error reading file"),
-        Ok(_) => {}
+use crate::utils::file_reader::FileReader;
+
+struct Day1Excercise {
+    file_reader: FileReader,
+}
+
+impl Day1Excercise {
+    fn new(file_reader: FileReader) -> Day1Excercise {
+        Day1Excercise { file_reader }
     }
-    let splitted_string = content.split("\\d");
-    for part in splitted_string {
-        if part == "" {
-            println!("Empty line");
 
-            continue;
+    fn find_elf_carrying_most_calories(&self) -> Result<usize, Box<dyn Error>> {
+        let content = self.file_reader.read_file(&"resources/day_1.txt")?;
+        let content_split_by_breakline = content.split("\n");
+        let content_vector = content_split_by_breakline.collect::<Vec<&str>>();
+
+        let mut group_by_whiteline: Vec<Vec<&str>> = vec![];
+        let mut temp_group: Vec<&str> = vec![];
+
+        for line in content_vector {
+            if line.len() > 0 {
+                temp_group.push(line);
+
+                continue;
+            }
+
+            group_by_whiteline.push(temp_group);
+            temp_group = vec![]
         }
-
-        print!("{}", part);
-    }
-    let elfs: Vec<Elf> = vec![
-        Elf {
-            food_bag: FoodBag {
-                items: vec![
-                    Food { calories: 1000 },
-                    Food { calories: 2000 },
-                    Food { calories: 3000 },
-                ],
-            },
-        },
-        Elf {
-            food_bag: FoodBag {
-                items: vec![Food { calories: 4000 }],
-            },
-        },
-        Elf {
-            food_bag: FoodBag {
-                items: vec![Food { calories: 5000 }, Food { calories: 6000 }],
-            },
-        },
-        Elf {
-            food_bag: FoodBag {
-                items: vec![
-                    Food { calories: 7000 },
-                    Food { calories: 8000 },
-                    Food { calories: 9000 },
-                ],
-            },
-        },
-        Elf {
-            food_bag: FoodBag {
-                items: vec![Food { calories: 10000 }],
-            },
-        },
-    ];
-
-    let mut elf_with_most_calories = 0;
-    let mut most_calories = 0;
-
-    for (index, elf) in elfs.iter().enumerate() {
-        if elf.total_calories() > most_calories {
-            elf_with_most_calories = index;
-            most_calories = elf.total_calories();
+        group_by_whiteline.push(temp_group);
+        println!("group_by_whiteline: {}", group_by_whiteline.len());
+        let mut parsed_group_by_whiteline: Vec<Vec<u16>> = vec![];
+        for group in group_by_whiteline {
+            let mut temp_group: Vec<u16> = vec![];
+            for raw_string in group {
+                let parsed_value = u16::from_str_radix(raw_string, 10)?;
+                temp_group.push(parsed_value);
+            }
+            parsed_group_by_whiteline.push(temp_group);
         }
-    }
+        println!("{:?}", parsed_group_by_whiteline);
 
-    elf_with_most_calories
+        Ok(1)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::utils::file_reader::FileReader;
+
+    use super::Day1Excercise;
+
+    #[test]
+    fn test_parsing_multiline_string() {
+        let file_reader = FileReader::nullable(
+            "9057
+8878
+2753
+7027
+
+2331
+3785
+1505
+3355
+3353
+4416",
+        );
+
+        let day_1_exercise = Day1Excercise::new(file_reader);
+
+        let result = day_1_exercise.find_elf_carrying_most_calories();
+
+        assert!(result.is_ok(), "{:?}", result.unwrap_err());
+        assert_eq!(result.unwrap(), 10);
+    }
 }

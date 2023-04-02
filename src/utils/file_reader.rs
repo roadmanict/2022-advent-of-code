@@ -6,24 +6,24 @@ use std::{
 
 use self::nullables::*;
 
-struct FileReader {
+pub struct FileReader {
     file: Box<dyn FileOpenWrapper>,
 }
 
 impl FileReader {
-    fn nullable(file_contents: &str) -> FileReader {
+    pub fn nullable(file_contents: &str) -> FileReader {
         FileReader {
             file: StubbedFileOpen::new(file_contents),
         }
     }
 
-    fn new() -> FileReader {
+    pub fn new() -> FileReader {
         FileReader {
             file: RealFileOpen::new(),
         }
     }
 
-    fn read_file(&self, path: &String) -> Result<String, io::Error> {
+    pub fn read_file(&self, path: &str) -> Result<String, io::Error> {
         let data_file_path = Path::new(&path);
 
         let mut data_file = self.file.open(&data_file_path)?;
@@ -120,7 +120,7 @@ mod tests {
     fn test_file_reader() {
         let file_reader = FileReader::nullable(&"Test content");
 
-        let result = file_reader.read_file(&String::from("some_path_to_file"));
+        let result = file_reader.read_file(&"some_path_to_file");
 
         assert!(result.is_ok());
         assert_eq!(result.unwrap(), String::from("Test content"));
