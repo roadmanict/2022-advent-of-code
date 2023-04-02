@@ -1,6 +1,9 @@
 use std::error::Error;
 
-use crate::utils::file_reader::FileReader;
+use crate::{
+    model::{elf::Elf, food::Food, food_bag::FoodBag},
+    utils::file_reader::FileReader,
+};
 
 struct Day1Excercise {
     file_reader: FileReader,
@@ -41,7 +44,16 @@ impl Day1Excercise {
             parsed_group_by_whiteline.push(temp_group);
         }
         println!("{:?}", parsed_group_by_whiteline);
+        let mut elfs: Vec<Elf> = vec![];
+        for parsed_group in parsed_group_by_whiteline {
+            let mut food_vec: Vec<Food> = vec![];
+            for calories in parsed_group {
+                food_vec.push(Food::new(calories));
+            }
+            elfs.push(Elf::new(FoodBag::new(food_vec)));
+        }
 
+        println!("{:?}", elfs.len());
         Ok(1)
     }
 }

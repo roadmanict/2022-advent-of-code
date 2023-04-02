@@ -9,7 +9,7 @@ impl Elf {
         Self { food_bag }
     }
 
-    pub fn total_calories(&self) -> u32 {
+    pub fn total_calories(&self) -> u16 {
         self.food_bag.total_calories()
     }
 }

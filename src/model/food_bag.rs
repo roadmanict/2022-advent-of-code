@@ -1,16 +1,25 @@
 use crate::model::food::Food;
 
 pub struct FoodBag {
-    pub items: Vec<Food>,
+    items: Vec<Food>,
+    total_calories: i32,
 }
 
 impl FoodBag {
     pub fn new(items: Vec<Food>) -> Self {
-        Self { items }
+        let mut total_calories: u32 = 0;
+        for food in items.iter() {
+            total_calories = total_calories + food.calories;
+        }
+
+        Self {
+            items,
+            total_calories,
+        }
     }
 
-    pub fn total_calories(&self) -> u32 {
-        let mut total: u32 = 0;
+    pub fn total_calories(&self) -> u16 {
+        let mut total: u16 = 0;
         for food in self.items.iter() {
             total = total + food.calories;
         }
