@@ -9,8 +9,8 @@ impl Elf {
         Self { food_bag }
     }
 
-    pub fn total_calories(&self) -> u32{
-        self.food_bag.total_calories()
+    pub fn total_calories(&self) -> u32 {
+        self.food_bag.total_calories
     }
 }
 

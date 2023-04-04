@@ -33,7 +33,7 @@ impl Day1Excercise {
             temp_group = vec![]
         }
         group_by_whiteline.push(temp_group);
-        println!("group_by_whiteline: {}", group_by_whiteline.len());
+
         let mut parsed_group_by_whiteline: Vec<Vec<u32>> = vec![];
         for group in group_by_whiteline {
             let mut temp_group: Vec<u32> = vec![];
@@ -43,7 +43,7 @@ impl Day1Excercise {
             }
             parsed_group_by_whiteline.push(temp_group);
         }
-        println!("{:?}", parsed_group_by_whiteline);
+
         let mut elfs: Vec<Elf> = vec![];
         for parsed_group in parsed_group_by_whiteline {
             let mut food_vec: Vec<Food> = vec![];
@@ -59,7 +59,6 @@ impl Day1Excercise {
             }
         }
 
-        println!("{:?}", elfs.len());
         Ok(most_calories)
     }
 }
