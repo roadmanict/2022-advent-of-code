@@ -14,7 +14,7 @@ impl Day1Excercise {
         Day1Excercise { file_reader }
     }
 
-    fn find_elf_carrying_most_calories(&self) -> Result<usize, Box<dyn Error>> {
+    fn find_elf_carrying_most_calories(&self) -> Result<u16, Box<dyn Error>> {
         let content = self.file_reader.read_file(&"resources/day_1.txt")?;
         let content_split_by_breakline = content.split("\n");
         let content_vector = content_split_by_breakline.collect::<Vec<&str>>();
@@ -52,9 +52,15 @@ impl Day1Excercise {
             }
             elfs.push(Elf::new(FoodBag::new(food_vec)));
         }
+        let mut most_calories: u16 = 0;
+        for elf in elfs.iter() {
+            if elf.total_calories() > most_calories {
+                most_calories = elf.total_calories();
+            }
+        }
 
         println!("{:?}", elfs.len());
-        Ok(1)
+        Ok(most_calories)
     }
 }
 
@@ -62,7 +68,7 @@ impl Day1Excercise {
 mod tests {
     use crate::utils::file_reader::FileReader;
 
-    use super::Day1Excercise;
+    use super::*;
 
     #[test]
     fn test_parsing_multiline_string() {
@@ -85,6 +91,6 @@ mod tests {
         let result = day_1_exercise.find_elf_carrying_most_calories();
 
         assert!(result.is_ok(), "{:?}", result.unwrap_err());
-        assert_eq!(result.unwrap(), 10);
+        assert_eq!(result.unwrap(), 27715);
     }
 }
