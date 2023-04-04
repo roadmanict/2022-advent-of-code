@@ -14,7 +14,7 @@ impl Day1Excercise {
         Day1Excercise { file_reader }
     }
 
-    fn find_elf_carrying_most_calories(&self) -> Result<u16, Box<dyn Error>> {
+    fn find_elf_carrying_most_calories(&self) -> Result<u32, Box<dyn Error>> {
         let content = self.file_reader.read_file(&"resources/day_1.txt")?;
         let content_split_by_breakline = content.split("\n");
         let content_vector = content_split_by_breakline.collect::<Vec<&str>>();
@@ -34,11 +34,11 @@ impl Day1Excercise {
         }
         group_by_whiteline.push(temp_group);
         println!("group_by_whiteline: {}", group_by_whiteline.len());
-        let mut parsed_group_by_whiteline: Vec<Vec<u16>> = vec![];
+        let mut parsed_group_by_whiteline: Vec<Vec<u32>> = vec![];
         for group in group_by_whiteline {
-            let mut temp_group: Vec<u16> = vec![];
+            let mut temp_group: Vec<u32> = vec![];
             for raw_string in group {
-                let parsed_value = u16::from_str_radix(raw_string, 10)?;
+                let parsed_value = u32::from_str_radix(raw_string, 10)?;
                 temp_group.push(parsed_value);
             }
             parsed_group_by_whiteline.push(temp_group);
@@ -52,7 +52,7 @@ impl Day1Excercise {
             }
             elfs.push(Elf::new(FoodBag::new(food_vec)));
         }
-        let mut most_calories: u16 = 0;
+        let mut most_calories: u32 = 0;
         for elf in elfs.iter() {
             if elf.total_calories() > most_calories {
                 most_calories = elf.total_calories();
@@ -92,5 +92,16 @@ mod tests {
 
         assert!(result.is_ok(), "{:?}", result.unwrap_err());
         assert_eq!(result.unwrap(), 27715);
+    }
+
+    #[test]
+    fn day_1_excercise() {
+        let file_reader = FileReader::new();
+        let day_1_exercise = Day1Excercise::new(file_reader);
+
+        let result = day_1_exercise.find_elf_carrying_most_calories();
+
+        assert!(result.is_ok(), "{:?}", result.unwrap_err());
+        assert_eq!(result.unwrap(), 69836);
     }
 }

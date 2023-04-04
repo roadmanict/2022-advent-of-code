@@ -1,9 +1,9 @@
 pub struct Food {
-    pub calories: u16,
+    pub calories: u32,
 }
 
 impl Food {
-    pub fn new(calories: u16) -> Self {
+    pub fn new(calories: u32) -> Self {
         Self { calories }
     }
 }
