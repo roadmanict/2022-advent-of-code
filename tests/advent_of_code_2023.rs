@@ -1,6 +1,4 @@
-use std::{
-    panic, error::Error,
-};
+use std::{error::Error, panic};
 
 use advent::{
     model::{elf::Elf, food::Food, food_bag::FoodBag},
@@ -71,5 +69,71 @@ fn test_day_1_part_2() {
     for elf in top_three_elfs_with_most_calories.iter() {
         top_three_calories += elf.total_calories();
     }
-    assert_eq!(top_three_calories, 69836);
+    assert_eq!(top_three_calories, 207968);
+}
+
+enum Play {
+    Rock,
+    Paper,
+    Scissors,
+}
+impl Play {
+    fn from_opponent(play: &str) -> Play {
+        if play.eq("A") {
+            return Play::Rock;
+        } else if play.eq("B") {
+            return Play::Paper;
+        } else {
+            return Play::Scissors;
+        }
+    }
+
+    fn from_answer(play: &str) -> Play {
+        if play.eq("X") {
+            return Play::Rock;
+        } else if play.eq("Y") {
+            return Play::Paper;
+        } else {
+            return Play::Scissors;
+        }
+    }
+}
+struct Strategy {
+    opponent: Play,
+    answer: Play,
+}
+impl Strategy {
+    fn new(opponent: Play, answer: Play) -> Strategy {
+        Strategy { opponent, answer }
+    }
+}
+
+#[test]
+fn test_day_2_part_1() {
+    let file_reader: FileReader = FileReader::new();
+    let day_2_input = match file_reader.read_file(&"resources/day_2.txt") {
+        Ok(data) => data,
+        Err(_) => panic!("Error reading file"),
+    };
+    let day_2_input_split_by_breakline = split_string_by_breakline(&day_2_input);
+    assert_eq!(day_2_input_split_by_breakline.len(), 2501);
+
+    let mut strategies: Vec<Strategy> = vec![];
+    for raw_strategy in day_2_input_split_by_breakline {
+        if raw_strategy.len() == 0 {
+            continue;
+        }
+        let (input, answer) = match raw_strategy.split_once(&" ") {
+            Some(it) => it,
+            None => panic!(
+                "Invalid rock paper scissors strategy string {}",
+                raw_strategy
+            ),
+        };
+        strategies.push(Strategy::new(
+            Play::from_opponent(input),
+            Play::from_answer(answer),
+        ));
+    }
+    assert_eq!(strategies.len(), 2500);
 }
