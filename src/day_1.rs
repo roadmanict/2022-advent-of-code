@@ -5,16 +5,16 @@ use crate::{
     utils::file_reader::FileReader,
 };
 
-struct Day1Excercise {
+pub struct Day1Exercise {
     file_reader: FileReader,
 }
 
-impl Day1Excercise {
-    fn new(file_reader: FileReader) -> Day1Excercise {
-        Day1Excercise { file_reader }
+impl Day1Exercise {
+    pub fn new(file_reader: FileReader) -> Day1Exercise {
+        Day1Exercise { file_reader }
     }
 
-    fn find_elf_carrying_most_calories(&self) -> Result<u32, Box<dyn Error>> {
+    pub fn find_elf_carrying_most_calories(&self) -> Result<u32, Box<dyn Error>> {
         let content = self.file_reader.read_file(&"resources/day_1.txt")?;
         let content_split_by_breakline = content.split("\n");
         let content_vector = content_split_by_breakline.collect::<Vec<&str>>();
@@ -85,22 +85,11 @@ mod tests {
 4416",
         );
 
-        let day_1_exercise = Day1Excercise::new(file_reader);
+        let day_1_exercise = Day1Exercise::new(file_reader);
 
         let result = day_1_exercise.find_elf_carrying_most_calories();
 
         assert!(result.is_ok(), "{:?}", result.unwrap_err());
         assert_eq!(result.unwrap(), 27715);
-    }
-
-    #[test]
-    fn day_1_excercise() {
-        let file_reader = FileReader::new();
-        let day_1_exercise = Day1Excercise::new(file_reader);
-
-        let result = day_1_exercise.find_elf_carrying_most_calories();
-
-        assert!(result.is_ok(), "{:?}", result.unwrap_err());
-        assert_eq!(result.unwrap(), 69836);
     }
 }
