@@ -56,3 +56,20 @@ fn test_day_1_part_1() {
 
     assert_eq!(most_calories, 69836);
 }
+
+#[test]
+fn test_day_1_part_2() {
+    let mut elfs = match parse_day_1_input() {
+        Ok(it) => it,
+        Err(_) => panic!("Error parsing day 1 input"),
+    };
+
+    elfs.sort_by(|a, b| a.compare_calories(b));
+    let mut top_three_calories: u32 = 0;
+    let (_, top_three_elfs_with_most_calories) = elfs.split_at(elfs.len() - 3);
+    assert_eq!(top_three_elfs_with_most_calories.len(), 3);
+    for elf in top_three_elfs_with_most_calories.iter() {
+        top_three_calories += elf.total_calories();
+    }
+    assert_eq!(top_three_calories, 69836);
+}

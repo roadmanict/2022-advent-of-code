@@ -1,3 +1,5 @@
+use std::cmp::Ordering;
+
 use super::food_bag::FoodBag;
 
 pub struct Elf {
@@ -11,6 +13,16 @@ impl Elf {
 
     pub fn total_calories(&self) -> u32 {
         self.food_bag.total_calories
+    }
+
+    pub fn compare_calories(&self, compare: &Elf) -> Ordering {
+        if self.total_calories() > compare.total_calories() {
+            return Ordering::Greater
+        } else if self.total_calories() < compare.total_calories() {
+            return Ordering::Less
+        }
+            
+        Ordering::Equal
     }
 }
 
