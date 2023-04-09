@@ -4,9 +4,26 @@ pub fn split_string_by_breakline(subject: &String) -> Vec<&str> {
     subject.split("\n").collect::<Vec<&str>>()
 }
 
+pub fn count_until_next_white_line(subject: &Vec<&str>, skip: Option<usize>) -> usize {
+    let mut count: usize = 0;
+
+    for line in subject.iter().skip(skip.unwrap_or(0)) {
+        count += 1;
+
+        if line.len() == 0 {
+            break;
+        }
+    }
+
+    count
+}
+
 pub fn group_string_vector_by_empty_line(subject: Vec<&str>) -> Vec<Vec<&str>> {
-    let mut group_by_whiteline: Vec<Vec<&str>> = vec![];
-    let mut temp_group: Vec<&str> = vec![];
+    let group_capacity = count_white_lines_in_str_vec(&subject);
+    let mut group_by_whiteline: Vec<Vec<&str>> = Vec::with_capacity(group_capacity);
+
+    let temp_group_capacity = count_until_next_white_line(&subject, None); 
+    let mut temp_group: Vec<&str> = Vec::with_capacity(temp_group_capacity);
 
     for line in subject {
         if line.len() > 0 {
@@ -19,6 +36,7 @@ pub fn group_string_vector_by_empty_line(subject: Vec<&str>) -> Vec<Vec<&str>> {
         temp_group = vec![]
     }
     group_by_whiteline.push(temp_group);
+
     group_by_whiteline
 }
 
@@ -36,8 +54,8 @@ pub fn parse_string_vec_to_u32_vec(subject: Vec<&str>) -> Result<Vec<u32>, Parse
     Ok(u32_vec)
 }
 
-pub fn count_white_lines_in_str_vec(subject: Vec<&str>) -> u32 {
-    let mut count = 0;
+pub fn count_white_lines_in_str_vec(subject: &Vec<&str>) -> usize {
+    let mut count: usize = 0;
     for line in subject.iter() {
         if line.len() == 0 {
             count += 1;
@@ -51,8 +69,15 @@ mod tests {
     use super::*;
 
     #[test]
+    fn test_count_until_next_white_line() {
+        let result = count_until_next_white_line(&vec!["test", "test", "asdf", "", "jojo", ""], None);
+
+        assert_eq!(result, 4)
+    }
+
+    #[test]
     fn test_count_white_lines_in_str_vec() {
-        let result = count_white_lines_in_str_vec(vec!["test", "", "asdf", "", "jojo", ""]);
+        let result = count_white_lines_in_str_vec(&vec!["test", "", "asdf", "", "jojo", ""]);
 
         assert_eq!(result, 3)
     }

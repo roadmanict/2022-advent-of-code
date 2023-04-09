@@ -1,7 +1,7 @@
 use std::{error::Error, panic};
 
 use advent::{
-    model::{elf::Elf, food::Food, food_bag::FoodBag},
+    model::{elf::Elf, food::Food, food_bag::FoodBag, play::Play, strategy::Strategy},
     utils::{
         file_reader::FileReader,
         string_utils::{
@@ -22,14 +22,14 @@ fn parse_day_1_input() -> Result<Vec<Elf>, Box<dyn Error>> {
 
     let group_by_whiteline = group_string_vector_by_empty_line(splitted_content);
 
-    let mut parsed_group_by_whiteline: Vec<Vec<u32>> = vec![];
+    let mut parsed_group_by_whiteline: Vec<Vec<u32>> = Vec::with_capacity(group_by_whiteline.len());
     for group in group_by_whiteline {
         parsed_group_by_whiteline.push(parse_string_vec_to_u32_vec(group)?);
     }
 
-    let mut elfs: Vec<Elf> = vec![];
+    let mut elfs: Vec<Elf> = Vec::with_capacity(parsed_group_by_whiteline.len());
     for parsed_group in parsed_group_by_whiteline {
-        let mut food_vec: Vec<Food> = vec![];
+        let mut food_vec: Vec<Food> = Vec::with_capacity(parsed_group.len());
         for calories in parsed_group {
             food_vec.push(Food::new(calories));
         }
@@ -70,42 +70,6 @@ fn test_day_1_part_2() {
         top_three_calories += elf.total_calories();
     }
     assert_eq!(top_three_calories, 207968);
-}
-
-enum Play {
-    Rock,
-    Paper,
-    Scissors,
-}
-impl Play {
-    fn from_opponent(play: &str) -> Play {
-        if play.eq("A") {
-            return Play::Rock;
-        } else if play.eq("B") {
-            return Play::Paper;
-        } else {
-            return Play::Scissors;
-        }
-    }
-
-    fn from_answer(play: &str) -> Play {
-        if play.eq("X") {
-            return Play::Rock;
-        } else if play.eq("Y") {
-            return Play::Paper;
-        } else {
-            return Play::Scissors;
-        }
-    }
-}
-struct Strategy {
-    opponent: Play,
-    answer: Play,
-}
-impl Strategy {
-    fn new(opponent: Play, answer: Play) -> Strategy {
-        Strategy { opponent, answer }
-    }
 }
 
 #[test]
