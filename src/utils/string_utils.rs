@@ -35,3 +35,25 @@ pub fn parse_string_vec_to_u32_vec(subject: Vec<&str>) -> Result<Vec<u32>, Parse
 
     Ok(u32_vec)
 }
+
+pub fn count_white_lines_in_str_vec(subject: Vec<&str>) -> u32 {
+    let mut count = 0;
+    for line in subject.iter() {
+        if line.len() == 0 {
+            count += 1;
+        }
+    }
+    count
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_count_white_lines_in_str_vec() {
+        let result = count_white_lines_in_str_vec(vec!["test", "", "asdf", "", "jojo", ""]);
+
+        assert_eq!(result, 3)
+    }
+}
