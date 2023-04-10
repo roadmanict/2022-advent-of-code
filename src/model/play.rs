@@ -12,6 +12,41 @@ impl PlayResult {
         }
     }
 }
+pub enum PlayResultStrategy {
+    Win,
+    Draw,
+    Lose,
+}
+impl PlayResultStrategy {
+    pub fn from_answer(play: &str) -> PlayResultStrategy {
+        if play.eq("X") {
+            return PlayResultStrategy::Lose;
+        } else if play.eq("Y") {
+            return PlayResultStrategy::Draw;
+        } else {
+            return PlayResultStrategy::Win;
+        }
+    }
+    pub fn should_play(&self, play: &Play) -> Play {
+        match &self {
+            PlayResultStrategy::Win => match play {
+                Play::Rock => return Play::Paper,
+                Play::Paper => return Play::Scissors,
+                Play::Scissors => return Play::Rock,
+            },
+            PlayResultStrategy::Draw => match play {
+                Play::Rock => return Play::Rock,
+                Play::Paper => return Play::Paper,
+                Play::Scissors => return Play::Scissors,
+            },
+            PlayResultStrategy::Lose => match play {
+                Play::Rock => return Play::Scissors,
+                Play::Paper => return Play::Rock,
+                Play::Scissors => return Play::Paper,
+            },
+        }
+    }
+}
 pub enum Play {
     Rock,
     Paper,
@@ -45,7 +80,7 @@ impl Play {
         }
     }
 
-    pub fn compare(&self, other_play: Play) -> PlayResult {
+    pub fn compare(&self, other_play: &Play) -> PlayResult {
         match &self {
             Play::Rock => match other_play {
                 Play::Rock => return PlayResult::Draw,
