@@ -29,9 +29,16 @@ fn test_day_3_part_1() {
 
     let mut sum_group_priority: u32 = 0;
     let groups = rucksacks.len() / 3;
+    assert_eq!(groups, 100);
+
     for n in 0..groups {
         let index = n * 3;
-        let mut group = vec![&rucksacks[index], &rucksacks[index + 1], &rucksacks[index + 2]];
+        println!("{}, {}", n, index);
+        let mut group = vec![
+            &rucksacks[index],
+            &rucksacks[index + 1],
+            &rucksacks[index + 2],
+        ];
         group.sort_by(|a, b| a.compare_size(b));
         println!(
             "{}, {}, {}",
@@ -39,11 +46,22 @@ fn test_day_3_part_1() {
             group[1].contents(),
             group[2].contents()
         );
-        for char in group[0].single_items().iter() {
-            if group[1].single_items().contains(char) && group[2].single_items().contains(char) { 
+        println!("New Group");
+        let group_0_single_items = group[0].single_items();
+        let group_1_single_items = group[1].single_items();
+        let group_2_single_items = group[2].single_items();
+        println!(
+            "{:?}, {:?}, {:?}",
+            group_0_single_items, group_1_single_items, group_2_single_items
+        );
+        for char in group_0_single_items.iter() {
+            if group_1_single_items.contains(char) && group_2_single_items.contains(char) {
                 println!("char {}, priority {}", char, group[1].item.priority());
                 sum_group_priority += group[1].item.priority();
-                continue;
+
+                break;
+            } else {
+                println!("does not contain char {}", char);
             }
         }
     }
