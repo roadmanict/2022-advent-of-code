@@ -46,7 +46,7 @@ pub fn parse_string_to_u32(subject: &str) -> Result<u32, ParseIntError> {
 }
 
 pub fn parse_string_vec_to_u32_vec(subject: Vec<&str>) -> Result<Vec<u32>, ParseIntError> {
-    let mut u32_vec: Vec<u32> = vec![];
+    let mut u32_vec: Vec<u32> = Vec::with_capacity(subject.len());
     for raw_string in subject {
         let parsed_value = parse_string_to_u32(raw_string)?;
         u32_vec.push(parsed_value);
