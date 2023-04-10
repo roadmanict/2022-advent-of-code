@@ -22,10 +22,10 @@ pub fn group_string_vector_by_empty_line(subject: Vec<&str>) -> Vec<Vec<&str>> {
     let group_capacity = count_white_lines_in_str_vec(&subject);
     let mut group_by_whiteline: Vec<Vec<&str>> = Vec::with_capacity(group_capacity);
 
-    let temp_group_capacity = count_until_next_white_line(&subject, None); 
+    let mut temp_group_capacity = count_until_next_white_line(&subject, None);
     let mut temp_group: Vec<&str> = Vec::with_capacity(temp_group_capacity);
 
-    for line in subject {
+    for (index, line) in subject.iter().enumerate() {
         if line.len() > 0 {
             temp_group.push(line);
 
@@ -33,7 +33,8 @@ pub fn group_string_vector_by_empty_line(subject: Vec<&str>) -> Vec<Vec<&str>> {
         }
 
         group_by_whiteline.push(temp_group);
-        temp_group = vec![]
+        temp_group_capacity = count_until_next_white_line(&subject, Some(index));
+        temp_group = Vec::with_capacity(temp_group_capacity);
     }
     group_by_whiteline.push(temp_group);
 
@@ -70,9 +71,18 @@ mod tests {
 
     #[test]
     fn test_count_until_next_white_line() {
-        let result = count_until_next_white_line(&vec!["test", "test", "asdf", "", "jojo", ""], None);
+        let result =
+            count_until_next_white_line(&vec!["test", "test", "asdf", "", "jojo", ""], None);
 
         assert_eq!(result, 4)
+    }
+
+    #[test]
+    fn test_count_until_next_white_line_second_whiteline() {
+        let result =
+            count_until_next_white_line(&vec!["test", "test", "asdf", "", "jojo", ""], Some(4));
+
+        assert_eq!(result, 2)
     }
 
     #[test]
