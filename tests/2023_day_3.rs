@@ -26,4 +26,27 @@ fn test_day_3_part_1() {
         sum_priority += rucksack.item.priority();
     }
     assert_eq!(sum_priority, 7737);
+
+    let mut sum_group_priority: u32 = 0;
+    let groups = rucksacks.len() / 3;
+    for n in 0..groups {
+        let index = n * 3;
+        let mut group = vec![&rucksacks[index], &rucksacks[index + 1], &rucksacks[index + 2]];
+        group.sort_by(|a, b| a.compare_size(b));
+        println!(
+            "{}, {}, {}",
+            group[0].contents(),
+            group[1].contents(),
+            group[2].contents()
+        );
+        for char in group[0].single_items().iter() {
+            if group[1].single_items().contains(char) && group[2].single_items().contains(char) { 
+                println!("char {}, priority {}", char, group[1].item.priority());
+                sum_group_priority += group[1].item.priority();
+                continue;
+            }
+        }
+    }
+
+    assert_eq!(sum_group_priority, 1000);
 }

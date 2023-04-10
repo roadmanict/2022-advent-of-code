@@ -73,6 +73,16 @@ pub fn find_common_chars(a: &str, b: &str) -> Vec<char> {
     }
     return common_chars;
 }
+pub fn count_char_in_string(ch: &char, subject: &str) -> usize {
+    let mut amount: usize = 0;
+    for subject_char in subject.chars() {
+        if subject_char == *ch {
+            amount += 1;
+        }
+    }
+
+    amount
+}
 
 #[cfg(test)]
 mod tests {
@@ -106,5 +116,11 @@ mod tests {
         let result = find_common_chars(&"aAbB", &"cCaB");
 
         assert_eq!(result, vec!['a', 'B'])
+    }
+    #[test]
+    fn test_count_chars_in_string() {
+        let result = count_char_in_string(&'a', &"baaabaaa");
+
+        assert_eq!(result, 6);
     }
 }

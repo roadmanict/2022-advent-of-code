@@ -1,4 +1,6 @@
-use crate::utils::string_utils::find_common_chars;
+use std::cmp::Ordering;
+
+use crate::utils::string_utils::{find_common_chars, count_char_in_string};
 
 pub struct Rucksack {
     pub compartment_one: String,
@@ -24,6 +26,39 @@ impl Rucksack {
             RucksackItem::new(common_item[0]),
         )
     }
+    pub fn compare_size(&self, other: &Rucksack) -> Ordering {
+        if self.size() > other.size() {
+            return Ordering::Greater;
+        } else if self.size() < other.size() {
+            return Ordering::Less;
+        }
+        return Ordering::Equal;
+    }
+    pub fn size(&self) -> usize {
+        self.compartment_one.len() + self.compartment_two.len()
+    }
+    pub fn contents(&self) -> String {
+        let mut contents = String::new();
+        contents.push_str(&self.compartment_one);
+        contents.push_str(&self.compartment_two);
+
+        contents
+    }
+    pub fn contains_item(&self, item: char) -> bool {
+        self.compartment_one.contains(item) || self.compartment_two.contains(item)
+    }
+    pub fn single_items(&self) -> Vec<char> {
+        let mut single_items: Vec<char> = vec![];
+        let contents = self.contents();
+        for char in contents.chars() {
+            let char_count = count_char_in_string(&char, &contents);
+            if char_count == 1 {
+                single_items.push(char);
+            }
+        }
+
+        single_items
+    }
 }
 
 pub struct RucksackItem {
@@ -35,8 +70,6 @@ impl RucksackItem {
     }
     pub fn priority(&self) -> u32 {
         let value_as_number = self.value as u32;
-
-        println!("{}", value_as_number);
 
         if value_as_number > 96 {
             return value_as_number - 96;
