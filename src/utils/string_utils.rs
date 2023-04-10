@@ -1,4 +1,4 @@
-use std::num::ParseIntError;
+use std::{num::ParseIntError, vec};
 
 pub fn split_string_by_breakline(subject: &String) -> Vec<&str> {
     subject.split("\n").collect::<Vec<&str>>()
@@ -64,6 +64,15 @@ pub fn count_white_lines_in_str_vec(subject: &Vec<&str>) -> usize {
     }
     count
 }
+pub fn find_common_chars(a: &str, b: &str) -> Vec<char> {
+    let mut common_chars: Vec<char> = vec![];
+    for char in a.chars() {
+        if b.contains(char) {
+            common_chars.push(char);
+        }
+    }
+    return common_chars;
+}
 
 #[cfg(test)]
 mod tests {
@@ -90,5 +99,12 @@ mod tests {
         let result = count_white_lines_in_str_vec(&vec!["test", "", "asdf", "", "jojo", ""]);
 
         assert_eq!(result, 3)
+    }
+
+    #[test]
+    fn test_find_common_chars() {
+        let result = find_common_chars(&"aAbB", &"cCaB");
+
+        assert_eq!(result, vec!['a', 'B'])
     }
 }
