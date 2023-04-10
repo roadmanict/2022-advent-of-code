@@ -1,5 +1,8 @@
 use advent::{
-    model::{play::{Play, PlayResultStrategy}, strategy::Strategy},
+    model::{
+        play::{Play, PlayResultStrategy},
+        strategy::Strategy,
+    },
     utils::{file_reader::FileReader, string_utils::split_string_by_breakline},
 };
 
@@ -28,7 +31,7 @@ fn test_day_2_part_1() {
         strategies.push(Strategy::new(
             Play::from_opponent(input),
             Play::from_answer(answer),
-            PlayResultStrategy::from_answer(answer)
+            PlayResultStrategy::from_answer(answer),
         ));
     }
     assert_eq!(strategies.len(), 2500);
@@ -36,17 +39,20 @@ fn test_day_2_part_1() {
     let mut score: usize = 0;
     for strategy in strategies.iter() {
         score += strategy.answer.score();
-        score += strategy.answer.compare(&strategy.opponent).score();
+        score += strategy.answer.versus(&strategy.opponent).score();
     }
 
     assert_eq!(score, 14375);
 
     score = 0;
     for strategy in strategies.iter() {
-        score += strategy.answer.score();
-        let play = strategy.play_result_strategy.should_play(&strategy.opponent);
-        score += play.compare(&strategy.opponent).score();
+        let hand = strategy
+            .play_result_strategy
+            .should_play(&strategy.opponent);
+        score += hand.score();
+        let result = hand.versus(&strategy.opponent);
+        score += result.score();
     }
 
-    assert_eq!(score, 14375);
+    assert_eq!(score, 10274);
 }

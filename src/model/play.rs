@@ -1,3 +1,5 @@
+
+#[derive(Debug)]
 pub enum PlayResult {
     Win,
     Draw,
@@ -12,11 +14,14 @@ impl PlayResult {
         }
     }
 }
+
+#[derive(Debug)]
 pub enum PlayResultStrategy {
     Win,
     Draw,
     Lose,
 }
+
 impl PlayResultStrategy {
     pub fn from_answer(play: &str) -> PlayResultStrategy {
         if play.eq("X") {
@@ -29,24 +34,14 @@ impl PlayResultStrategy {
     }
     pub fn should_play(&self, play: &Play) -> Play {
         match &self {
-            PlayResultStrategy::Win => match play {
-                Play::Rock => return Play::Paper,
-                Play::Paper => return Play::Scissors,
-                Play::Scissors => return Play::Rock,
-            },
-            PlayResultStrategy::Draw => match play {
-                Play::Rock => return Play::Rock,
-                Play::Paper => return Play::Paper,
-                Play::Scissors => return Play::Scissors,
-            },
-            PlayResultStrategy::Lose => match play {
-                Play::Rock => return Play::Scissors,
-                Play::Paper => return Play::Rock,
-                Play::Scissors => return Play::Paper,
-            },
+            PlayResultStrategy::Win => play.loses_from(),
+            PlayResultStrategy::Draw => play.draws_from(),
+            PlayResultStrategy::Lose => play.wins_from(),
         }
     }
 }
+
+#[derive(Debug)]
 pub enum Play {
     Rock,
     Paper,
@@ -79,8 +74,31 @@ impl Play {
             Play::Scissors => return 3,
         }
     }
+    pub fn draws_from(&self) -> Play {
+        match &self {
+            Play::Rock => Play::Rock,
+            Play::Paper => Play::Paper,
+            Play::Scissors => Play::Scissors,
+        }
+    }
 
-    pub fn compare(&self, other_play: &Play) -> PlayResult {
+    pub fn wins_from(&self) -> Play {
+        match &self {
+            Play::Rock => Play::Scissors,
+            Play::Paper => Play::Rock,
+            Play::Scissors => Play::Paper,
+        }
+    }
+
+    pub fn loses_from(&self) -> Play {
+        match &self {
+            Play::Rock => Play::Paper,
+            Play::Paper => Play::Scissors,
+            Play::Scissors => Play::Rock,
+        }
+    }
+
+    pub fn versus(&self, other_play: &Play) -> PlayResult {
         match &self {
             Play::Rock => match other_play {
                 Play::Rock => return PlayResult::Draw,
