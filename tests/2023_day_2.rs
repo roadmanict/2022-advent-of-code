@@ -1,5 +1,8 @@
 use advent::{
-    model::{play::Play, strategy::Strategy},
+    model::{
+        play::{Play, PlayResult},
+        strategy::Strategy,
+    },
     utils::{file_reader::FileReader, string_utils::split_string_by_breakline},
 };
 
@@ -31,4 +34,12 @@ fn test_day_2_part_1() {
         ));
     }
     assert_eq!(strategies.len(), 2500);
+
+    let mut score: usize = 0;
+    for strategy in strategies {
+        score += strategy.answer.score();
+        score += strategy.answer.compare(strategy.opponent).score();
+    }
+
+    assert_eq!(score, 14375);
 }
