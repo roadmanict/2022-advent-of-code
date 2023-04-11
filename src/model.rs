@@ -4,3 +4,4 @@ pub mod elf;
 pub mod strategy;
 pub mod play;
 pub mod rucksack;
+pub mod assignment;
