@@ -50,8 +50,9 @@ impl Rucksack {
     pub fn single_items(&self) -> Vec<char> {
         let mut single_items: Vec<char> = vec![];
         let contents = self.contents();
+        let mut char_count: usize;
         for char in contents.chars() {
-            let char_count = count_char_in_string(&char, &contents);
+            char_count = count_char_in_string(&char, &contents);
             if char_count == 1 {
                 single_items.push(char);
             }
