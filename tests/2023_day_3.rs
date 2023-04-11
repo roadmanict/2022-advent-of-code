@@ -1,5 +1,5 @@
 use advent::{
-    model::rucksack::Rucksack,
+    model::rucksack::{Rucksack, RucksackItem},
     utils::{file_reader::FileReader, string_utils::split_string_by_breakline},
 };
 
@@ -31,40 +31,39 @@ fn test_day_3_part_1() {
     let groups = rucksacks.len() / 3;
     assert_eq!(groups, 100);
 
+    let mut changed: bool;
+    let mut index: usize;
+    let mut group: (&Rucksack, &Rucksack, &Rucksack);
+    let mut group_0: String;
+    let mut group_1: String;
+    let mut group_2: String;
+    let mut priority: u32;
+
     for n in 0..groups {
-        let index = n * 3;
-        println!("{}, {}", n, index);
-        let mut group = vec![
+        changed = false;
+        index = n * 3;
+        group = (
             &rucksacks[index],
             &rucksacks[index + 1],
             &rucksacks[index + 2],
-        ];
-        group.sort_by(|a, b| a.compare_size(b));
-        println!(
-            "{}, {}, {}",
-            group[0].contents(),
-            group[1].contents(),
-            group[2].contents()
         );
-        println!("New Group");
-        let group_0_single_items = group[0].single_items();
-        let group_1_single_items = group[1].single_items();
-        let group_2_single_items = group[2].single_items();
-        println!(
-            "{:?}, {:?}, {:?}",
-            group_0_single_items, group_1_single_items, group_2_single_items
-        );
-        for char in group_0_single_items.iter() {
-            if group_1_single_items.contains(char) && group_2_single_items.contains(char) {
-                println!("char {}, priority {}", char, group[1].item.priority());
-                sum_group_priority += group[1].item.priority();
+        group_0 = group.0.contents();
+        group_1 = group.1.contents();
+        group_2 = group.2.contents();
 
+        for char in group_0.chars() {
+            if group_1.contains(char) && group_2.contains(char) {
+                priority = RucksackItem::new(char).priority();
+                sum_group_priority += priority;
+
+                changed = true;
                 break;
-            } else {
-                println!("does not contain char {}", char);
             }
+        }
+        if !changed {
+            panic!("Did not find a common item type");
         }
     }
 
-    assert_eq!(sum_group_priority, 1000);
+    assert_eq!(sum_group_priority, 2697);
 }
