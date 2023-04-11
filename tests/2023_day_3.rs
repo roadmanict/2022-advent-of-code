@@ -32,20 +32,18 @@ fn test_day_3_part_1() {
     assert_eq!(groups, 100);
 
     let mut changed: bool;
-    let mut group: (&Rucksack, &Rucksack, &Rucksack);
     let mut group_0: String;
     let mut group_1: String;
     let mut group_2: String;
     let mut priority: u32;
 
-    for rucksacks_slice in rucksacks.chunks(3) {
-        assert_eq!(rucksacks_slice.len(), 3);
+    for group in rucksacks.chunks(3) {
+        assert_eq!(group.len(), 3);
         changed = false;
-        group = (&rucksacks_slice[0], &rucksacks_slice[1], &rucksacks_slice[2]);
 
-        group_0 = group.0.contents();
-        group_1 = group.1.contents();
-        group_2 = group.2.contents();
+        group_0 = group[0].contents();
+        group_1 = group[1].contents();
+        group_2 = group[2].contents();
 
         for char in group_0.chars() {
             if group_1.contains(char) && group_2.contains(char) {
