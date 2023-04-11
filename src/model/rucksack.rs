@@ -1,6 +1,6 @@
 use std::cmp::Ordering;
 
-use crate::utils::string_utils::{find_common_chars, count_char_in_string};
+use crate::utils::string_utils::{count_char_in_string, find_common_chars};
 
 pub struct Rucksack {
     pub compartment_one: String,
