@@ -47,6 +47,7 @@ fn test_day_3_part_1() {
             &rucksacks[index + 1],
             &rucksacks[index + 2],
         );
+
         group_0 = group.0.contents();
         group_1 = group.1.contents();
         group_2 = group.2.contents();
