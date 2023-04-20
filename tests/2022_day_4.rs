@@ -1,3 +1,5 @@
+use std::str::FromStr;
+
 use advent::{
     model::assignment::Assignment,
     utils::{file_reader::FileReader, string_utils::split_string_by_breakline},
@@ -10,25 +12,18 @@ fn test_day_4() {
     let input_split_by_breakline = split_string_by_breakline(&input);
     assert_eq!(input_split_by_breakline.len(), 1001);
 
-    let mut pairs: Vec<(Assignment, Assignment)> =
-        Vec::with_capacity(input_split_by_breakline.len());
 
-    let mut assignments: (Assignment, Assignment);
+    let mut count = 0;
     for raw_pair in input_split_by_breakline.iter() {
         if raw_pair.len() == 0 {
             continue;
         }
-        let assignments = raw_pair
-            .split(|ch| ch == '-' || ch == ',')
-            .collect::<Vec<&str>>()
-            .iter()
-            .map(|ch| -> u8 {
-                match u8::from_str_radix(ch, 10) {
-                    Ok(parsed) => return parsed,
-                    Err(_) => panic!("Invalid raw_pair: {}", raw_pair),
-                }
-            })
-            .collect::<Vec<u8>>();
-        assert_eq!(assignments.len(), 4);
+        let (left, right) = raw_pair.split_once(',').unwrap();
+        let left_assignment = Assignment::from_str(left).unwrap();
+        let right_assignment = Assignment::from_str(right).unwrap();
+        if left_assignment.fully_contains(&right_assignment) || right_assignment.fully_contains(&left_assignment) {
+            count += 1;
+        }
     }
+    assert_eq!(count, 644);
 }
