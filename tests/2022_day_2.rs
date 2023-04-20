@@ -1,3 +1,5 @@
+use std::str::FromStr;
+
 use advent::{
     model::{
         play::{Play, PlayResultStrategy},
@@ -21,18 +23,8 @@ fn test_day_2_part_1() {
         if raw_strategy.len() == 0 {
             continue;
         }
-        let (input, answer) = match raw_strategy.split_once(&" ") {
-            Some(it) => it,
-            None => panic!(
-                "Invalid rock paper scissors strategy string {}",
-                raw_strategy
-            ),
-        };
-        strategies.push(Strategy::new(
-            Play::from_opponent(input),
-            Play::from_answer(answer),
-            PlayResultStrategy::from_answer(answer),
-        ));
+
+        strategies.push( Strategy::from_str(raw_strategy).unwrap());
     }
     assert_eq!(strategies.len(), 2500);
 
