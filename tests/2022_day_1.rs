@@ -1,13 +1,10 @@
-use std::{error::Error, panic};
+use std::{error::Error, panic, str::FromStr};
 
 use advent::{
     model::{elf::Elf, food::Food, food_bag::FoodBag},
     utils::{
         file_reader::FileReader,
-        string_utils::{
-            group_string_vector_by_empty_line, parse_string_vec_to_u32_vec,
-            split_string_by_breakline,
-        },
+        string_utils::{group_string_vector_by_empty_line, split_string_by_breakline},
     },
 };
 
@@ -22,16 +19,11 @@ fn parse_day_1_input() -> Result<Vec<Elf>, Box<dyn Error>> {
 
     let group_by_whiteline = group_string_vector_by_empty_line(splitted_content);
 
-    let mut parsed_group_by_whiteline: Vec<Vec<u32>> = Vec::with_capacity(group_by_whiteline.len());
-    for group in group_by_whiteline {
-        parsed_group_by_whiteline.push(parse_string_vec_to_u32_vec(group)?);
-    }
-
-    let mut elfs: Vec<Elf> = Vec::with_capacity(parsed_group_by_whiteline.len());
-    for parsed_group in parsed_group_by_whiteline {
+    let mut elfs: Vec<Elf> = Vec::with_capacity(group_by_whiteline.len());
+    for parsed_group in group_by_whiteline {
         let mut food_vec: Vec<Food> = Vec::with_capacity(parsed_group.len());
         for calories in parsed_group {
-            food_vec.push(Food::new(calories));
+            food_vec.push(Food::from_str(calories)?);
         }
         elfs.push(Elf::new(FoodBag::new(food_vec)));
     }
@@ -71,4 +63,3 @@ fn test_day_1_part_2() {
     }
     assert_eq!(top_three_calories, 207968);
 }
-
