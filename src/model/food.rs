@@ -1,4 +1,4 @@
-use std::{str::FromStr, num::ParseIntError};
+use std::{num::ParseIntError, str::FromStr};
 
 pub struct Food {
     pub calories: u32,

@@ -1,7 +1,7 @@
+pub mod assignment;
+pub mod elf;
 pub mod food;
 pub mod food_bag;
-pub mod elf;
-pub mod strategy;
 pub mod play;
 pub mod rucksack;
-pub mod assignment;
+pub mod strategy;

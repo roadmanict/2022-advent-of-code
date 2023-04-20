@@ -17,11 +17,11 @@ impl Elf {
 
     pub fn compare_calories(&self, compare: &Elf) -> Ordering {
         if self.total_calories() > compare.total_calories() {
-            return Ordering::Greater
+            return Ordering::Greater;
         } else if self.total_calories() < compare.total_calories() {
-            return Ordering::Less
+            return Ordering::Less;
         }
-            
+
         Ordering::Equal
     }
 }

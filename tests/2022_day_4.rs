@@ -12,7 +12,6 @@ fn test_day_4() {
     let input_split_by_breakline = split_string_by_breakline(&input);
     assert_eq!(input_split_by_breakline.len(), 1001);
 
-
     let mut count = 0;
     for raw_pair in input_split_by_breakline.iter() {
         if raw_pair.len() == 0 {
@@ -21,7 +20,9 @@ fn test_day_4() {
         let (left, right) = raw_pair.split_once(',').unwrap();
         let left_assignment = Assignment::from_str(left).unwrap();
         let right_assignment = Assignment::from_str(right).unwrap();
-        if left_assignment.fully_contains(&right_assignment) || right_assignment.fully_contains(&left_assignment) {
+        if left_assignment.fully_contains(&right_assignment)
+            || right_assignment.fully_contains(&left_assignment)
+        {
             count += 1;
         }
     }
