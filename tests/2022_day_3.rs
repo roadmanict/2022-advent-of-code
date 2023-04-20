@@ -6,10 +6,7 @@ use advent::{
 #[test]
 fn test_day_3_part_1() {
     let file_reader: FileReader = FileReader::new();
-    let input = match file_reader.read_file(&"resources/day_3.txt") {
-        Ok(data) => data,
-        Err(_) => panic!("Error reading file"),
-    };
+    let input = file_reader.read_file(&"resources/day_3.txt").unwrap();
     let input_split_by_breakline = split_string_by_breakline(&input);
     assert_eq!(input_split_by_breakline.len(), 301);
 

@@ -1,20 +1,14 @@
 use std::str::FromStr;
 
 use advent::{
-    model::{
-        play::{Play, PlayResultStrategy},
-        strategy::Strategy,
-    },
+    model::strategy::Strategy,
     utils::{file_reader::FileReader, string_utils::split_string_by_breakline},
 };
 
 #[test]
 fn test_day_2_part_1() {
     let file_reader: FileReader = FileReader::new();
-    let day_2_input = match file_reader.read_file(&"resources/day_2.txt") {
-        Ok(data) => data,
-        Err(_) => panic!("Error reading file"),
-    };
+    let day_2_input = file_reader.read_file(&"resources/day_2.txt").unwrap();
     let day_2_input_split_by_breakline = split_string_by_breakline(&day_2_input);
     assert_eq!(day_2_input_split_by_breakline.len(), 2501);
 
@@ -24,7 +18,7 @@ fn test_day_2_part_1() {
             continue;
         }
 
-        strategies.push( Strategy::from_str(raw_strategy).unwrap());
+        strategies.push(Strategy::from_str(raw_strategy).unwrap());
     }
     assert_eq!(strategies.len(), 2500);
 

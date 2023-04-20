@@ -38,7 +38,8 @@ impl Rucksack {
         self.compartment_one.len() + self.compartment_two.len()
     }
     pub fn contents(&self) -> String {
-        let mut contents = String::new();
+        let mut contents =
+            String::with_capacity(self.compartment_one.len() + self.compartment_two.len());
         contents.push_str(&self.compartment_one);
         contents.push_str(&self.compartment_two);
 
