@@ -12,7 +12,8 @@ fn test_day_4() {
     let input_split_by_breakline = split_string_by_breakline(&input);
     assert_eq!(input_split_by_breakline.len(), 1001);
 
-    let mut count = 0;
+    let mut fully_contains_count = 0;
+    let mut partial_contains_count = 0;
     for raw_pair in input_split_by_breakline.iter() {
         if raw_pair.len() == 0 {
             continue;
@@ -23,8 +24,14 @@ fn test_day_4() {
         if left_assignment.fully_contains(&right_assignment)
             || right_assignment.fully_contains(&left_assignment)
         {
-            count += 1;
+            fully_contains_count += 1;
+        }
+        if left_assignment.partial_contains(&right_assignment)
+            || right_assignment.partial_contains(&left_assignment)
+        {
+            partial_contains_count += 1;
         }
     }
-    assert_eq!(count, 644);
+    assert_eq!(fully_contains_count, 644);
+    assert_eq!(partial_contains_count, 926);
 }

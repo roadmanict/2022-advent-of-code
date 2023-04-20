@@ -14,6 +14,13 @@ impl Assignment {
 
         self.range.contains(min) && self.range.contains(max)
     }
+
+    pub fn partial_contains(&self, assignment: &Assignment) -> bool {
+        let min = assignment.range.start();
+        let max = assignment.range.end();
+
+        self.range.contains(min) || self.range.contains(max)
+    }
 }
 
 #[derive(Debug)]
