@@ -6,15 +6,12 @@ use advent::{
 #[test]
 fn test_day_4() {
     let file_reader: FileReader = FileReader::new();
-    let input = match file_reader.read_file(&"resources/day_4.txt") {
-        Ok(data) => data,
-        Err(_) => panic!("Error reading file"),
-    };
+    let input = file_reader.read_file(&"resources/day_4.txt").unwrap();
     let input_split_by_breakline = split_string_by_breakline(&input);
     assert_eq!(input_split_by_breakline.len(), 1001);
 
     let mut pairs: Vec<(Assignment, Assignment)> =
-        Vec::with_capacity(input_split_by_breakline.len() / 2);
+        Vec::with_capacity(input_split_by_breakline.len());
 
     let mut assignments: (Assignment, Assignment);
     for raw_pair in input_split_by_breakline.iter() {

@@ -1,4 +1,4 @@
-use std::ops::RangeInclusive;
+use std::{fmt::Display, num::ParseIntError, ops::RangeInclusive, str::FromStr};
 
 pub struct Assignment {
     pub range: RangeInclusive<u8>,
@@ -13,6 +13,42 @@ impl Assignment {
         let max = assignment.range.end();
 
         self.range.contains(min) && self.range.contains(max)
+    }
+}
+
+#[derive(Debug)]
+pub enum ParseAssignmentError {
+    InvalidArgument(String),
+    ParseIntError(ParseIntError),
+}
+impl From<ParseIntError> for ParseAssignmentError {
+    fn from(value: ParseIntError) -> Self {
+        ParseAssignmentError::ParseIntError(value)
+    }
+}
+impl Display for ParseAssignmentError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            ParseAssignmentError::InvalidArgument(str) => write!(f, "{}", str),
+            ParseAssignmentError::ParseIntError(err) => write!(f, "{}", err),
+        }
+    }
+}
+
+impl std::error::Error for ParseAssignmentError {}
+
+impl FromStr for Assignment {
+    type Err = ParseAssignmentError;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        let (start, end) = s
+            .split_once('-')
+            .ok_or(ParseAssignmentError::InvalidArgument(format!(
+                "Error parsing Assignment string: {}",
+                s
+            )))?;
+
+        Ok(Self::new(u8::from_str(start)?, u8::from_str(end)?))
     }
 }
 
@@ -42,5 +78,12 @@ mod tests {
         let b = Assignment::new(2, 4);
 
         assert_eq!(a.fully_contains(&b), false);
+    }
+
+    #[test]
+    fn test_from_str() {
+        let ass = Assignment::from_str("4-8").unwrap();
+
+        assert_eq!(ass.range, Assignment::new(4, 8).range);
     }
 }
