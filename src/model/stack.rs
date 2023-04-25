@@ -44,23 +44,25 @@ impl FromStr for Supplies {
         let lines = s.lines();
         for (index, line) in lines.enumerate() {
             if index == 0 {
-                let len_stacks = line.len() / 4;
+                let len_stacks = (line.len() + 1) / 4;
+                println!("len {}, stack {}", line.len(), len_stacks);
                 for _ in 0..len_stacks {
                     stacks.push(Stack::new())
                 }
             }
 
-            let stack = stacks.get_mut(index).ok_or("Stack not available")?;
-
             let mut line = line;
-            while !line.is_empty() {
-                let (raw_supply, rest) = line.split_at(4);
-                let crte = Crate::from_str(raw_supply);
+            let mut stack_index = 0;
+            while line.len() >= 4 {
+                let stack = stacks.get_mut(stack_index).ok_or("Stack not available")?;
+                let (raw_crate, rest) = line.split_at(4);
+                let crte = Crate::from_str(raw_crate);
                 if let Ok(crte) = crte {
                     stack.add_crate(crte);
                 }
 
                 line = rest;
+                stack_index += 1;
             }
         }
 
@@ -74,6 +76,7 @@ mod tests {
 
     #[test]
     fn test_crate_from_str() {
+        assert_eq!("    ".split_at(4), ("    ", ""));
         let crte = Crate::from_str("[E] ").expect("Crate string could be parsed");
 
         assert_eq!(crte.0, 'E')
@@ -94,7 +97,8 @@ mod tests {
 [Z] [M] [P]
  1   2   3 ",
         )
-        .unwrap();
+        .expect("Expect Supplies string to be parsed");
+        println!("{:?}", supplies);
 
         assert_eq!(supplies.stacks.len(), 3)
     }
