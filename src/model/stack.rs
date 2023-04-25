@@ -30,6 +30,15 @@ impl Stack {
     }
 }
 
+fn batch_string(s: &str, size: usize) -> &[&str] {
+    let length = s.len();
+    let mut start = 0;
+    while start < length {
+        s.split_at(size);
+    }
+    todo!()
+}
+
 #[derive(Debug)]
 struct Supplies {
     pub stacks: Vec<Stack>,
@@ -42,18 +51,20 @@ impl FromStr for Supplies {
         let mut stacks: Vec<Stack> = vec![];
 
         let lines = s.lines();
-        for (index, line) in lines.enumerate() {
+        for (index, line) in lines.rev().enumerate() {
             if index == 0 {
-                let len_stacks = (line.len() + 1) / 4;
-                println!("len {}, stack {}", line.len(), len_stacks);
-                for _ in 0..len_stacks {
+                let n_stacks = (line.len() + 1) / 4;
+                println!("len {}, stack {}", line.len(), n_stacks);
+                for _ in 0..n_stacks {
                     stacks.push(Stack::new())
                 }
+
+                continue;
             }
 
             let mut line = line;
             let mut stack_index = 0;
-            while line.len() >= 4 {
+            while line.len() >= 3 {
                 let stack = stacks.get_mut(stack_index).ok_or("Stack not available")?;
                 let (raw_crate, rest) = line.split_at(4);
                 let crte = Crate::from_str(raw_crate);
@@ -100,6 +111,12 @@ mod tests {
         .expect("Expect Supplies string to be parsed");
         println!("{:?}", supplies);
 
-        assert_eq!(supplies.stacks.len(), 3)
+        assert_eq!(supplies.stacks.len(), 3);
+        assert_eq!(supplies.stacks[0].crates[0].0, 'Z');
+        assert_eq!(supplies.stacks[0].crates[1].0, 'N');
+        assert_eq!(supplies.stacks[1].crates[0].0, 'M');
+        assert_eq!(supplies.stacks[1].crates[1].0, 'C');
+        assert_eq!(supplies.stacks[1].crates[2].0, 'D');
+        assert_eq!(supplies.stacks[2].crates[0].0, 'P');
     }
 }
