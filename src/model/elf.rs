@@ -15,14 +15,8 @@ impl Elf {
         self.food_bag.total_calories
     }
 
-    pub fn compare_calories(&self, compare: &Elf) -> Ordering {
-        if self.total_calories() > compare.total_calories() {
-            return Ordering::Greater;
-        } else if self.total_calories() < compare.total_calories() {
-            return Ordering::Less;
-        }
-
-        Ordering::Equal
+    pub fn compare_calories(&self, other: &Elf) -> Ordering {
+        self.total_calories().cmp(&other.total_calories())
     }
 }
 

@@ -1,10 +1,10 @@
 use std::{num::ParseIntError, vec};
 
-pub fn split_string_by_breakline(subject: &String) -> Vec<&str> {
+pub fn split_string_by_breakline(subject: &str) -> Vec<&str> {
     subject.split('\n').collect::<Vec<&str>>()
 }
 
-pub fn count_until_next_white_line(subject: &Vec<&str>, skip: Option<usize>) -> usize {
+pub fn count_until_next_white_line(subject: &[&str], skip: Option<usize>) -> usize {
     let mut count: usize = 0;
 
     for line in subject.iter().skip(skip.unwrap_or(0)) {
@@ -42,7 +42,7 @@ pub fn group_string_vector_by_empty_line(subject: Vec<&str>) -> Vec<Vec<&str>> {
 }
 
 pub fn parse_string_to_u32(subject: &str) -> Result<u32, ParseIntError> {
-    u32::from_str_radix(subject, 10)
+    subject.parse::<u32>()
 }
 
 pub fn parse_string_vec_to_u32_vec(subject: Vec<&str>) -> Result<Vec<u32>, ParseIntError> {
@@ -55,7 +55,7 @@ pub fn parse_string_vec_to_u32_vec(subject: Vec<&str>) -> Result<Vec<u32>, Parse
     Ok(u32_vec)
 }
 
-pub fn count_white_lines_in_str_vec(subject: &Vec<&str>) -> usize {
+pub fn count_white_lines_in_str_vec(subject: &[&str]) -> usize {
     let mut count: usize = 0;
     for line in subject.iter() {
         if line.is_empty(){

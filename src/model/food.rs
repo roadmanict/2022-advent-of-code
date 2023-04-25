@@ -14,6 +14,6 @@ impl FromStr for Food {
     type Err = ParseIntError;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Ok(Self::new(u32::from_str_radix(s, 10)?))
+        Ok(Self::new(s.parse::<u32>()?))
     }
 }

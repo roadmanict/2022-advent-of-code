@@ -27,13 +27,9 @@ impl Rucksack {
         )
     }
     pub fn compare_size(&self, other: &Rucksack) -> Ordering {
-        if self.size() > other.size() {
-            return Ordering::Greater;
-        } else if self.size() < other.size() {
-            return Ordering::Less;
-        }
-        Ordering::Equal
+        self.size().cmp(&other.size()) 
     }
+
     pub fn size(&self) -> usize {
         self.compartment_one.len() + self.compartment_two.len()
     }

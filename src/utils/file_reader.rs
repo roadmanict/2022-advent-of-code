@@ -13,7 +13,7 @@ pub struct FileReader {
 impl FileReader {
     pub fn nullable(file_contents: &str) -> FileReader {
         FileReader {
-            file: StubbedFileOpen::new(file_contents),
+            file: Box::new(StubbedFileOpen::new(file_contents))
         }
     }
 
@@ -97,11 +97,11 @@ mod nullables {
     }
 
     impl StubbedFileOpen {
-        pub fn new(file_contents: &str) -> Box<dyn FileOpenWrapper> {
+        pub fn new(file_contents: &str) -> Self {
             let file = file_contents.to_owned();
-            Box::new(StubbedFileOpen {
+            Self {
                 file_contents: file,
-            })
+            }
         }
     }
 
