@@ -27,7 +27,7 @@ impl Rucksack {
         )
     }
     pub fn compare_size(&self, other: &Rucksack) -> Ordering {
-        self.size().cmp(&other.size()) 
+        self.size().cmp(&other.size())
     }
 
     pub fn size(&self) -> usize {

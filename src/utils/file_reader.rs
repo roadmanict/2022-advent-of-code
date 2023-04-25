@@ -13,7 +13,7 @@ pub struct FileReader {
 impl FileReader {
     pub fn nullable(file_contents: &str) -> FileReader {
         FileReader {
-            file: Box::new(StubbedFileOpen::new(file_contents))
+            file: Box::new(StubbedFileOpen::new(file_contents)),
         }
     }
 

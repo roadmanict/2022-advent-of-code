@@ -58,7 +58,7 @@ pub fn parse_string_vec_to_u32_vec(subject: Vec<&str>) -> Result<Vec<u32>, Parse
 pub fn count_white_lines_in_str_vec(subject: &[&str]) -> usize {
     let mut count: usize = 0;
     for line in subject.iter() {
-        if line.is_empty(){
+        if line.is_empty() {
             count += 1;
         }
     }
@@ -71,7 +71,7 @@ pub fn find_common_chars(a: &str, b: &str) -> Vec<char> {
             common_chars.push(char);
         }
     }
-    
+
     common_chars
 }
 pub fn count_char_in_string(ch: &char, subject: &str) -> usize {

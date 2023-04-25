@@ -1,3 +1,2 @@
 #[test]
-fn test_day_5() {
-}
+fn test_day_5() {}
