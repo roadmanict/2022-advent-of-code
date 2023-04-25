@@ -7,9 +7,9 @@ pub enum PlayResult {
 impl PlayResult {
     pub fn score(&self) -> usize {
         match &self {
-            PlayResult::Win => return 6,
-            PlayResult::Draw => return 3,
-            PlayResult::Loss => return 0,
+            PlayResult::Win => 6,
+            PlayResult::Draw => 3,
+            PlayResult::Loss => 0,
         }
     }
 }
@@ -24,7 +24,7 @@ pub enum PlayResultStrategy {
 impl PlayResultStrategy {
     pub fn from_answer(play: &str) -> PlayResultStrategy {
         if play.eq("X") {
-            return PlayResultStrategy::Lose;
+            PlayResultStrategy::Lose
         } else if play.eq("Y") {
             return PlayResultStrategy::Draw;
         } else {
@@ -49,7 +49,7 @@ pub enum Play {
 impl Play {
     pub fn from_opponent(play: &str) -> Play {
         if play.eq("A") {
-            return Play::Rock;
+            Play::Rock
         } else if play.eq("B") {
             return Play::Paper;
         } else {
@@ -59,7 +59,7 @@ impl Play {
 
     pub fn from_answer(play: &str) -> Play {
         if play.eq("X") {
-            return Play::Rock;
+            Play::Rock
         } else if play.eq("Y") {
             return Play::Paper;
         } else {
@@ -68,9 +68,9 @@ impl Play {
     }
     pub fn score(&self) -> usize {
         match &self {
-            Play::Rock => return 1,
-            Play::Paper => return 2,
-            Play::Scissors => return 3,
+            Play::Rock => 1,
+            Play::Paper => 2,
+            Play::Scissors => 3,
         }
     }
     pub fn draws_from(&self) -> Play {
@@ -100,19 +100,19 @@ impl Play {
     pub fn versus(&self, other_play: &Play) -> PlayResult {
         match &self {
             Play::Rock => match other_play {
-                Play::Rock => return PlayResult::Draw,
-                Play::Paper => return PlayResult::Loss,
-                Play::Scissors => return PlayResult::Win,
+                Play::Rock => PlayResult::Draw,
+                Play::Paper => PlayResult::Loss,
+                Play::Scissors => PlayResult::Win,
             },
             Play::Paper => match other_play {
-                Play::Rock => return PlayResult::Win,
-                Play::Paper => return PlayResult::Draw,
-                Play::Scissors => return PlayResult::Loss,
+                Play::Rock => PlayResult::Win,
+                Play::Paper => PlayResult::Draw,
+                Play::Scissors => PlayResult::Loss,
             },
             Play::Scissors => match other_play {
-                Play::Rock => return PlayResult::Loss,
-                Play::Paper => return PlayResult::Win,
-                Play::Scissors => return PlayResult::Draw,
+                Play::Rock => PlayResult::Loss,
+                Play::Paper => PlayResult::Win,
+                Play::Scissors => PlayResult::Draw,
             },
         }
     }

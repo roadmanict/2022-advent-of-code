@@ -53,7 +53,7 @@ impl FromStr for Supplies {
             let stack = stacks.get_mut(index).ok_or("Stack not available")?;
 
             let mut line = line;
-            while line.len() > 0 {
+            while !line.is_empty() {
                 let (raw_supply, rest) = line.split_at(4);
                 let crte = Crate::from_str(raw_supply);
                 if let Ok(crte) = crte {
@@ -81,7 +81,7 @@ mod tests {
 
     #[test]
     fn test_crate_from_str_invalid_input() {
-        let error = Crate::from_str("    ").err().expect("from_str to return error");
+        let error = Crate::from_str("    ").expect_err("from_str to return error");
 
         assert_eq!(error, "Invalid crate");
     }

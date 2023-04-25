@@ -9,7 +9,7 @@ impl FoodBag {
     pub fn new(items: Vec<Food>) -> Self {
         let mut total_calories: u32 = 0;
         for food in items.iter() {
-            total_calories = total_calories + food.calories;
+            total_calories += food.calories;
         }
 
         Self {

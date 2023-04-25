@@ -26,7 +26,7 @@ impl FileReader {
     pub fn read_file(&self, path: &str) -> Result<String, io::Error> {
         let data_file_path = Path::new(&path);
 
-        let mut data_file = self.file.open(&data_file_path)?;
+        let mut data_file = self.file.open(data_file_path)?;
         let mut content = String::new();
         data_file.read_to_string(&mut content)?;
 
@@ -118,9 +118,9 @@ mod tests {
 
     #[test]
     fn test_file_reader() {
-        let file_reader = FileReader::nullable(&"Test content");
+        let file_reader = FileReader::nullable("Test content");
 
-        let result = file_reader.read_file(&"some_path_to_file");
+        let result = file_reader.read_file("some_path_to_file");
 
         assert!(result.is_ok());
         assert_eq!(result.unwrap(), String::from("Test content"));

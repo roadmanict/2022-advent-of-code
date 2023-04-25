@@ -1,7 +1,7 @@
 use std::{num::ParseIntError, vec};
 
 pub fn split_string_by_breakline(subject: &String) -> Vec<&str> {
-    subject.split("\n").collect::<Vec<&str>>()
+    subject.split('\n').collect::<Vec<&str>>()
 }
 
 pub fn count_until_next_white_line(subject: &Vec<&str>, skip: Option<usize>) -> usize {
@@ -10,7 +10,7 @@ pub fn count_until_next_white_line(subject: &Vec<&str>, skip: Option<usize>) -> 
     for line in subject.iter().skip(skip.unwrap_or(0)) {
         count += 1;
 
-        if line.len() == 0 {
+        if line.is_empty() {
             break;
         }
     }
@@ -26,7 +26,7 @@ pub fn group_string_vector_by_empty_line(subject: Vec<&str>) -> Vec<Vec<&str>> {
     let mut temp_group: Vec<&str> = Vec::with_capacity(temp_group_capacity);
 
     for (index, line) in subject.iter().enumerate() {
-        if line.len() > 0 {
+        if !line.is_empty() {
             temp_group.push(line);
 
             continue;
@@ -114,13 +114,13 @@ mod tests {
 
     #[test]
     fn test_find_common_chars() {
-        let result = find_common_chars(&"aAbB", &"cCaB");
+        let result = find_common_chars("aAbB", "cCaB");
 
         assert_eq!(result, vec!['a', 'B'])
     }
     #[test]
     fn test_count_chars_in_string() {
-        let result = count_char_in_string(&'a', &"baaabaaa");
+        let result = count_char_in_string(&'a', "baaabaaa");
 
         assert_eq!(result, 6);
     }

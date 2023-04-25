@@ -6,13 +6,13 @@ use advent::{
 #[test]
 fn test_day_3_part_1() {
     let file_reader: FileReader = FileReader::new();
-    let input = file_reader.read_file(&"resources/day_3.txt").unwrap();
+    let input = file_reader.read_file("resources/day_3.txt").unwrap();
     let input_split_by_breakline = split_string_by_breakline(&input);
     assert_eq!(input_split_by_breakline.len(), 301);
 
     let mut rucksacks: Vec<Rucksack> = Vec::with_capacity(input_split_by_breakline.len());
     for input_line in input_split_by_breakline.iter() {
-        if input_line.len() == 0 {
+        if input_line.is_empty() {
             continue;
         }
         rucksacks.push(Rucksack::pack(input_line));

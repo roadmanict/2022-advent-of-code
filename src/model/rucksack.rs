@@ -32,7 +32,7 @@ impl Rucksack {
         } else if self.size() < other.size() {
             return Ordering::Less;
         }
-        return Ordering::Equal;
+        Ordering::Equal
     }
     pub fn size(&self) -> usize {
         self.compartment_one.len() + self.compartment_two.len()
@@ -74,9 +74,9 @@ impl RucksackItem {
         let value_as_number = self.value as u32;
 
         if value_as_number > 96 {
-            return value_as_number - 96;
+            value_as_number - 96
         } else {
-            return value_as_number - 38;
+            value_as_number - 38
         }
     }
 }

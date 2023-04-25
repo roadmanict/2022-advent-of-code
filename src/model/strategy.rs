@@ -24,7 +24,7 @@ impl FromStr for Strategy {
     type Err = String;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let (input, answer) = match s.split_once(" ") {
+        let (input, answer) = match s.split_once(' ') {
             Some(it) => it,
             None => return Err(format!("Could not parse strategy string: {}", s)),
         };

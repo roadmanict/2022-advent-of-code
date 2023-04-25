@@ -68,7 +68,7 @@ mod tests {
         let a = Assignment::new(2, 3);
         let b = Assignment::new(2, 3);
 
-        assert_eq!(a.fully_contains(&b), true);
+        assert!(a.fully_contains(&b));
     }
 
     #[test]
@@ -76,7 +76,7 @@ mod tests {
         let a = Assignment::new(2, 3);
         let b = Assignment::new(1, 3);
 
-        assert_eq!(a.fully_contains(&b), false);
+        assert!(!a.fully_contains(&b));
     }
 
     #[test]
@@ -84,7 +84,7 @@ mod tests {
         let a = Assignment::new(2, 3);
         let b = Assignment::new(2, 4);
 
-        assert_eq!(a.fully_contains(&b), false);
+        assert!(!a.fully_contains(&b));
     }
 
     #[test]

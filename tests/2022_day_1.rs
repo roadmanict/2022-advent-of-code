@@ -11,7 +11,7 @@ use advent::{
 fn parse_day_1_input() -> Result<Vec<Elf>, Box<dyn Error>> {
     let file_reader: FileReader = FileReader::new();
 
-    let content = match file_reader.read_file(&"resources/day_1.txt") {
+    let content = match file_reader.read_file("resources/day_1.txt") {
         Ok(data) => data,
         Err(_) => panic!("Error reading file"),
     };

@@ -8,14 +8,14 @@ use advent::{
 #[test]
 fn test_day_4() {
     let file_reader: FileReader = FileReader::new();
-    let input = file_reader.read_file(&"resources/day_4.txt").unwrap();
+    let input = file_reader.read_file("resources/day_4.txt").unwrap();
     let input_split_by_breakline = split_string_by_breakline(&input);
     assert_eq!(input_split_by_breakline.len(), 1001);
 
     let mut fully_contains_count = 0;
     let mut partial_contains_count = 0;
     for raw_pair in input_split_by_breakline.iter() {
-        if raw_pair.len() == 0 {
+        if raw_pair.is_empty() {
             continue;
         }
         let (left, right) = raw_pair.split_once(',').unwrap();
