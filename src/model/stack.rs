@@ -39,7 +39,7 @@ impl FromStr for MoveCrate {
         let from = split_string[3].parse::<usize>()?;
         let to = split_string[5].parse::<usize>()?;
 
-        Ok(MoveCrate { amount, from, to })
+        Ok(MoveCrate::new(amount, from ,to))
     }
 }
 
