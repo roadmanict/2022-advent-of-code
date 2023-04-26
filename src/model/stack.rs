@@ -39,7 +39,7 @@ impl FromStr for MoveCrate {
         let from = split_string[3].parse::<usize>()?;
         let to = split_string[5].parse::<usize>()?;
 
-        Ok(MoveCrate::new(amount, from ,to))
+        Ok(MoveCrate::new(amount, from, to))
     }
 }
 
@@ -65,6 +65,12 @@ impl Stack {
 
         self.crates.drain(range).rev().collect::<Vec<_>>()
     }
+
+    fn remove_crates_9001(&mut self, amount: usize) -> Vec<Crate> {
+        let range = self.crates.len() - amount..self.crates.len();
+
+        self.crates.drain(range).collect::<Vec<_>>()
+    }
 }
 
 #[derive(Debug)]
@@ -75,6 +81,14 @@ pub struct Supplies {
 impl Supplies {
     pub fn move_crate(&mut self, move_crate: MoveCrate) {
         let crates_to_move = self.stacks[move_crate.from - 1].remove_crates(move_crate.amount);
+
+        for ele in crates_to_move {
+            self.stacks[move_crate.to - 1].add_crate(ele);
+        }
+    }
+
+    pub fn move_crate_9001(&mut self, move_crate: MoveCrate) {
+        let crates_to_move = self.stacks[move_crate.from - 1].remove_crates_9001(move_crate.amount);
 
         for ele in crates_to_move {
             self.stacks[move_crate.to - 1].add_crate(ele);
