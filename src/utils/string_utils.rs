@@ -91,8 +91,7 @@ mod tests {
 
     #[test]
     fn test_count_until_next_white_line() {
-        let result =
-            count_until_next_white_line(&vec!["test", "test", "asdf", "", "jojo", ""], None);
+        let result = count_until_next_white_line(&["test", "test", "asdf", "", "jojo", ""], None);
 
         assert_eq!(result, 4)
     }
@@ -100,14 +99,14 @@ mod tests {
     #[test]
     fn test_count_until_next_white_line_second_whiteline() {
         let result =
-            count_until_next_white_line(&vec!["test", "test", "asdf", "", "jojo", ""], Some(4));
+            count_until_next_white_line(&["test", "test", "asdf", "", "jojo", ""], Some(4));
 
         assert_eq!(result, 2)
     }
 
     #[test]
     fn test_count_white_lines_in_str_vec() {
-        let result = count_white_lines_in_str_vec(&vec!["test", "", "asdf", "", "jojo", ""]);
+        let result = count_white_lines_in_str_vec(&["test", "", "asdf", "", "jojo", ""]);
 
         assert_eq!(result, 3)
     }

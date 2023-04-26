@@ -82,7 +82,11 @@ impl Supplies {
     }
 
     pub fn get_top_crates(&self) -> String {
-        self.stacks.iter().map(|stack| stack.crates[stack.crates.len() - 1].0.to_string()).collect::<Vec<_>>().concat::<_>()
+        self.stacks
+            .iter()
+            .map(|stack| stack.crates[stack.crates.len() - 1].0.to_string())
+            .collect::<Vec<_>>()
+            .concat::<_>()
     }
 }
 
