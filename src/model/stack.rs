@@ -51,29 +51,33 @@ impl FromStr for Supplies {
         let mut stacks: Vec<Stack> = vec![];
 
         let lines = s.lines();
+        let mut crate_indexes: Vec<usize> = vec![];
         for (index, line) in lines.rev().enumerate() {
             if index == 0 {
-                let n_stacks = (line.len() + 1) / 4;
-                println!("len {}, stack {}", line.len(), n_stacks);
-                for _ in 0..n_stacks {
-                    stacks.push(Stack::new())
+                for (index, ch) in line.chars().enumerate() {
+                    if ch.is_whitespace() {
+                        continue;
+                    }
+
+                    crate_indexes.push(index);
+                    stacks.push(Stack::new());
+
+                    println!("index {}, part {}", index, ch);
                 }
 
                 continue;
             }
 
-            let mut line = line;
-            let mut stack_index = 0;
-            while line.len() >= 3 {
-                let stack = stacks.get_mut(stack_index).ok_or("Stack not available")?;
-                let (raw_crate, rest) = line.split_at(4);
-                let crte = Crate::from_str(raw_crate);
-                if let Ok(crte) = crte {
-                    stack.add_crate(crte);
+            println!("indexes: {:?}", crate_indexes);
+            let chars = line.chars().collect::<Vec<_>>();
+
+            for (index, crate_index) in crate_indexes.iter().enumerate() {
+                let ch = chars[*crate_index];
+                if ch.is_whitespace() {
+                    continue;
                 }
 
-                line = rest;
-                stack_index += 1;
+                stacks[index].add_crate(Crate(ch));
             }
         }
 
