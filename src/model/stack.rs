@@ -1,4 +1,4 @@
-use std::{num::ParseIntError, str::FromStr};
+use std::{error::Error, fmt::Display, num::ParseIntError, str::FromStr};
 
 #[derive(Debug)]
 pub struct MoveCrate {
@@ -18,6 +18,17 @@ pub enum MoveCrateFromStrError {
     Generic(String),
     ParseIntError(ParseIntError),
 }
+
+impl Display for MoveCrateFromStrError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            MoveCrateFromStrError::Generic(err) => write!(f, "{}", err),
+            MoveCrateFromStrError::ParseIntError(err) => write!(f, "{}", err),
+        }
+    }
+}
+
+impl Error for MoveCrateFromStrError {}
 
 impl From<String> for MoveCrateFromStrError {
     fn from(value: String) -> Self {
