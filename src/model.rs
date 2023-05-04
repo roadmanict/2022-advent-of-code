@@ -6,3 +6,4 @@ pub mod play;
 pub mod rucksack;
 pub mod stack;
 pub mod strategy;
+pub mod datastream;
